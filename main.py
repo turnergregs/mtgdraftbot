@@ -211,25 +211,20 @@ async def on_message(message) :
         #await message.channel.send(text)
         text = draft.getPickName(username, int(command[1]))
         if text != "invalid pick" :
-          msg = await message.channel.send(text)
-          await msg.add_reaction("👍")
-          await msg.add_reaction("👎")
+          msg = await message.channel.send(text+" (react with 👍 or 👎")
+          #await msg.add_reaction("👍")
+          #await msg.add_reaction("👎")
           #up = discord.utils.get(client.get_all_emojis(), name='+1')
           #down = discord.utils.get(client.get_all_emojis(), name='-1')
           #await client.add_reaction(msg, up)
           #await client.add_reaction(msg, down)
 
-          notReacted = True
           def check(reaction, user) :
-            print(user)
-            print(username)
             return user == username
           
-          while notReacted :
-            res = await client.wait_for("reaction_add", check=check)
-            if res :
-              notReacted = False
-              print("yay you reacted!")
+          res = await client.wait_for("reaction_add", check=check)
+          if res :
+            print("yay you reacted!")
           #if reaction.emoji == "👍" :
             #print("nice")
           #elif reaction.emoji == "👎" :
