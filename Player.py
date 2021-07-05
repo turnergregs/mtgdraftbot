@@ -35,7 +35,7 @@ class Player:
     #return text
     temp = Pack(self.pool)
     print("did we get here?")
-    await callback(self.user, temp.getPackFile(str(self.name)+"pool"))
+    await callback(self.user, temp.getPackFile(str(self.name)+"pool"), "Here are the cards you've picked so far")
 
   def numPacks(self) :
     pack = 1 if self.pack != [] else 0
