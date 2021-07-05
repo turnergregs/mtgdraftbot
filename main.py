@@ -67,8 +67,7 @@ def getSamplePack(id) :
 def getDraft(command) :
   if len(command) > 1 :
     num = int(command[1])
-    if num not in drafts :
-      print(num)
+    if num not in drafts.keys() :
       return None
     else :
       return drafts[num]
