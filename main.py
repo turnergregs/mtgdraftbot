@@ -143,13 +143,16 @@ async def on_message(message) :
     nickname = str(message.author).split("#")[0]
     if len(drafts) == 0 :
       await message.channel.send("no drafts to leave")
+    num = int(command[1])
+    if num not in drafts :
+      await message.channel.send("draft not found")
     elif len(command) > 1 :
-      if drafts[int(command[1])].inProgress :
+      if drafts[num].inProgress :
         await message.channel.send("draft has already started")
-      elif username not in drafts[command[1]].players :
+      elif username not in drafts[num].players :
         await message.channel.send("you aren't in the draft")
       else :
-        drafts[command[1]].removePlayer(username)
+        drafts[num].removePlayer(username)
         await message.channel.send(nickname+" has left the draft")
     else :
       draft = getPlayerDraft(username)
@@ -162,8 +165,11 @@ async def on_message(message) :
   elif message.content.startswith('!start') :
     if len(drafts) == 0 :
       await message.channel.send("no draft to start")
+    num = int(command[1])
+    if num not in drafts :
+      await message.channel.send("draft not found")
     else :
-      draft = drafts[int(command[1])] if len(command) > 1 else drafts[0]
+      draft = drafts[num] if len(command) > 1 else drafts[0]
       if draft.host != str(message.author) :
         await message.channel.send("only the host can start the draft")
       else :
@@ -174,8 +180,11 @@ async def on_message(message) :
   elif message.content.startswith('!end') :
     if len(drafts) == 0 :
       await message.channel.send("no drafts to end")
+    num = int(command[1])
+    if num not in drafts :
+      await message.channel.send("draft not found")
     else :
-      draft = drafts[int(command[1])] if len(command) > 1 else drafts[0]
+      draft = drafts[num] if len(command) > 1 else drafts[0]
       if draft.host != str(message.author) and str(message.author) != admin :
         await message.channel.send("only the host can end the draft")
       else :
@@ -228,8 +237,11 @@ async def on_message(message) :
   elif message.content.startswith('!players') :
     if len(drafts) == 0 :
       await message.channel.send("no current drafts")
+    num = int(command[1])
+    if num not in drafts :
+      await message.channel.send("draft not found")
     else :
-      draft = drafts[int(command[1])] if len(command) > 1 else drafts[0]
+      draft = drafts[num] if len(command) > 1 else drafts[0]
       if draft is None :
         await message.channel.send("draft doesn't exist")
       #await message.channel.send(str(draft.getPlayers())+" players have joined draft "+str(draft.id))
@@ -242,8 +254,11 @@ async def on_message(message) :
     #draft = getPlayerDraft(username)
     #if draft is None :
       #await message.channel.send("That player isn't in a draft")
+    num = int(command[1])
+    if num not in drafts :
+      await message.channel.send("draft not found")
     else :
-      draft = drafts[int(command[1])] if len(command) > 1 else drafts[0]
+      draft = drafts[num] if len(command) > 1 else drafts[0]
       if draft is None :
         await message.channel.send("draft doesn't exist")
       elif not draft.inProgress :
