@@ -246,6 +246,8 @@ async def on_message(message) :
       draft = drafts[int(command[1])] if len(command) > 1 else drafts[0]
       if draft is None :
         await message.channel.send("draft doesn't exist")
+      elif !draft.inProgress :
+        await message.channel.send("draft hasn't started yet")
       await message.channel.send(draft.getQueue())
     
   elif message.content.startswith('!card') :
