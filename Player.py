@@ -1,5 +1,6 @@
 import discord
 import os
+from Pack import Pack
 
 class Player:
   pick = 1
@@ -7,6 +8,7 @@ class Player:
   def __init__(self, author):
     self.user = author
     self.name = str(author)
+    self.nickname = str(author).split("#")[0]
     self.pool = []
     self.pack = []
     self.packNum = 1
@@ -26,14 +28,17 @@ class Player:
   def addToPool(self, card):
     self.pool.append(card)
 
-  def viewPool(self) :
-    text = ""
-    for card in self.pool :
-      text += card.name+"\n"
-    return text
+  async def viewPool(self, callback) :
+    temp = Pack(self.pool)
+    poolSize = 7
+    await callback(self.user, temp.getPackFile(str(self.name)+"pool", poolSize), "Here are the cards you've picked so far")
+
+  def numPacks(self) :
+    pack = 1 if self.pack != [] else 0
+    return pack + len(self.nextPacks)
 
   def getQueue(self) :
-    return self.name+" has "+str(len(self.nextPacks))+" packs"
+    return self.numPacks()
 
   async def endDraft(self) :
     filename = "draft"+self.name+".txt"

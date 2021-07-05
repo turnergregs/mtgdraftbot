@@ -1,5 +1,6 @@
 from PIL import Image
 import requests
+import math
 
 class Pack :
 
@@ -21,7 +22,8 @@ class Pack :
     self.pick += 1
     return self.cards.pop(index)
 
-  def getPackFile(self, name) :
+  def getPackFile(self, name, width=5) :
+    height = math.ceil(len(self.cards)/width)
     imgs = []
     for card in self.cards :
       print(card.name)
@@ -29,8 +31,8 @@ class Pack :
     images = [Image.open(x) for x in imgs]
     widths, heights = zip(*(i.size for i in images))
     #total_width = sum(widths)
-    total_width = widths[0]*5
-    max_height = max(heights)*3
+    total_width = widths[0]*width
+    max_height = max(heights)*height
     card_height = heights[0]
 
     new_im = Image.new('RGB', (total_width, max_height))

@@ -9,6 +9,8 @@ load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 client = discord.Client()
 
+admin = "grenrut#9853"
+
 players = {}
 setup = False
 inProgress = False
@@ -27,6 +29,16 @@ def getPlayerDraft(username) :
     if draft.hasPlayer(username) :
       return draft
   return None
+
+def getDraft(command) :
+  if len(command) > 1 :
+    num = int(command[1])
+    for draft in drafts :
+      if draft.id == num :
+        return drafts[num]
+    return None
+  else :
+    return getFirstOpenDraftId()
 
 def getCardByName(name) :
   return getCard("https://api.scryfall.com/cards/named?fuzzy="+name)
@@ -122,10 +134,8 @@ async def on_message(message) :
     if getPlayerDraft(username) is not None :
       await message.channel.send("you are already in a draft")
       return
-    if len(command) > 1 :
-      draft = drafts[int(command[1])]
     else :
-      draft = getFirstOpenDraftId()
+      draft = getDraft(command)
       if draft is None :
         await message.channel.send("all drafts are full")
         return
@@ -138,29 +148,32 @@ async def on_message(message) :
 
   elif message.content.startswith('!leave') :
     username = str(message.author)
+    nickname = str(message.author).split("#")[0]
     if len(drafts) == 0 :
       await message.channel.send("no drafts to leave")
     elif len(command) > 1 :
       if drafts[int(command[1])].inProgress :
         await message.channel.send("draft has already started")
-      elif username not in drafts[command[1]].players :
+      elif username not in drafts[int(command[1])].players :
         await message.channel.send("you aren't in the draft")
       else :
-        drafts[command[1]].removePlayer(username)
-        await message.channel.send(username+" has left the draft")
+        drafts[int(command[1])].removePlayer(username)
+        await message.channel.send(nickname+" has left the draft")
     else :
       draft = getPlayerDraft(username)
       if id is None :
         await message.channel.send("you aren't in any drafts")
       else :
         draft.removePlayer(username)
-        await message.channel.send(username+" has left the draft")
+        await message.channel.send(nickname+" has left the draft")
 
   elif message.content.startswith('!start') :
     if len(drafts) == 0 :
       await message.channel.send("no draft to start")
     else :
-      draft = drafts[int(command[1])] if len(command) > 1 else drafts[0]
+      draft = getDraft(command)
+      if draft is None :
+        await message.channel.send("draft not found")
       if draft.host != str(message.author) :
         await message.channel.send("only the host can start the draft")
       else :
@@ -172,8 +185,10 @@ async def on_message(message) :
     if len(drafts) == 0 :
       await message.channel.send("no drafts to end")
     else :
-      draft = drafts[int(command[1])] if len(command) > 1 else drafts[0]
-      if draft.host != str(message.author) :
+      draft = getDraft(command)
+      if draft is None :
+        await message.channel.send("draft not found")
+      if draft.host != str(message.author) and str(message.author) != admin :
         await message.channel.send("only the host can end the draft")
       else :
         await message.channel.send("ended draft "+str(draft.id))
@@ -197,6 +212,26 @@ async def on_message(message) :
         if text != "invalid pick" :
           await draft.sendNextPack(username, sendFile)
 
+
+        #text = draft.getPickName(username, int(command[1]))
+        #if text != "invalid pick" :
+          #msg = await message.channel.send(text)
+          #await msg.add_reaction("👍")
+          #await msg.add_reaction("👎")
+
+          #def check(reaction, user) :
+            #return user == username
+          
+          #res = await client.wait_for("reaction_add", check=check)
+          #if res:
+            #reaction, user = res
+            #if str(reaction.emoji) == ":+1:":
+              #draft.makePick(username, int(command[1]))
+              #await draft.sendNextPack(username, sendFile)
+            #if str(reaction.emoji) == ":-1:":
+              #await message.channel.send("please pick again")
+          
+
   elif message.content.startswith('!pool') :
     if len(drafts) == 0 :
       await message.channel.send("no current drafts")
@@ -206,24 +241,28 @@ async def on_message(message) :
       if draft is None :
         await message.channel.send("You aren't in a draft")
       else :
-        await message.channel.send(draft.viewPool(username))
+        await draft.viewPool(username, sendFile)
 
   elif message.content.startswith('!players') :
     if len(drafts) == 0 :
       await message.channel.send("no current drafts")
     else :
-      draft = drafts[int(command[1])] if len(command) > 1 else drafts[0]
-      await message.channel.send(str(draft.getPlayers())+" players have joined draft "+str(draft.id))
+      draft = getDraft(command)
+      if draft is None :
+        await message.channel.send("draft doesn't exist")
+      #await message.channel.send(str(draft.getPlayers())+" players have joined draft "+str(draft.id))
+      await message.channel.send(draft.listPlayers())
 
   elif message.content.startswith('!queue') :
     if len(drafts) == 0 :
       await message.channel.send("no current drafts")
-    username = command[1]
-    draft = getPlayerDraft(username)
-    if draft is None :
-      await message.channel.send("That player isn't in a draft")
     else :
-      await message.channel.send(draft.getQueue(username))
+      draft = getDraft(command)
+      if draft is None :
+        await message.channel.send("draft doesn't exist")
+      elif not draft.inProgress :
+        await message.channel.send("draft hasn't started yet")
+      await message.channel.send(draft.getQueue())
     
   elif message.content.startswith('!card') :
     text = ""
