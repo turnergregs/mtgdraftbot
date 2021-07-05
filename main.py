@@ -221,16 +221,15 @@ async def on_message(message) :
 
           def check(response, author) :
             print(response)
-            if response.emoji == "👍" :
-              print("yes")
-            elif response.emoji == "👎" :
-              print("no")
-            else :
-              print("error")
+            #if response.emoji == "👍" :
+              #print("yes")
+            #elif response.emoji == "👎" :
+              #print("no")
+            #else :
+              #print("error")
 
           res = await client.wait_for("reaction_add", check=check)
-          if res:
-            print("nice?")
+          #if res:
             #reaction, user = res
             #if str(reaction.emoji) == ":+1:":
               #draft.makePick(username, int(command[1]))
