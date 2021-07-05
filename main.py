@@ -222,7 +222,7 @@ async def on_message(message) :
           def check(res) :
             print("nice")
 
-          res = await client.wait_for(check=check)
+          res = await client.wait_for("message", check=check)
           #if res:
             #reaction, user = res
             #if str(reaction.emoji) == ":+1:":
