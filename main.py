@@ -134,10 +134,8 @@ async def on_message(message) :
     if getPlayerDraft(username) is not None :
       await message.channel.send("you are already in a draft")
       return
-    if len(command) > 1 :
-      draft = drafts[int(command[1])]
     else :
-      draft = getFirstOpenDraftId()
+      draft = getDraft(command)
       if draft is None :
         await message.channel.send("all drafts are full")
         return
