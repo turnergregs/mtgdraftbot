@@ -131,6 +131,7 @@ class Draft :
     return True
 
   async def sendNewPack(self, callback) :
+    print("um wat")
     for p in self.players :
       p.packNum += 1
       p.pack.pick = 1
