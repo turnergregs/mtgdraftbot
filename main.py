@@ -222,7 +222,7 @@ async def on_message(message) :
           def check() :
             print("nice")
 
-          res = await client.wait_for("message", check=check)
+          res = await client.wait_for("reaction_add", check=check)
           if res:
             print("nice?")
             #reaction, user = res
