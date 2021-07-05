@@ -225,8 +225,6 @@ async def on_message(message) :
 
           reaction, user = await client.wait_for("reaction_add", check=check)
           print("hello")
-          if reaction.emoji == "👍":
-            print("nice")
           #if res:
             #reaction, user = res
             #if str(reaction.emoji) == ":+1:":
