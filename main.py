@@ -218,9 +218,12 @@ async def on_message(message) :
           #down = discord.utils.get(client.get_all_emojis(), name='-1')
           #await client.add_reaction(msg, up)
           #await client.add_reaction(msg, down)
-          res = await client.wait_for(emoji=["👍","👎"], message=msg, user=message.author)
-          if res:
+
+          def check :
             print("nice")
+
+          res = await client.wait_for(message=msg, user=message.author, check=check)
+          #if res:
             #reaction, user = res
             #if str(reaction.emoji) == ":+1:":
               #draft.makePick(username, int(command[1]))
