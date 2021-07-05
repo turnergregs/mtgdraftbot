@@ -221,12 +221,7 @@ async def on_message(message) :
 
           def check(response, author) :
             print(response)
-            #if response.emoji == "👍" :
-              #print("yes")
-            #elif response.emoji == "👎" :
-              #print("no")
-            #else :
-              #print("error")
+            print(author)
 
           res = await client.wait_for("reaction_add", check=check)
           #if res:
