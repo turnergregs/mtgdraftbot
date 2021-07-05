@@ -223,7 +223,7 @@ async def on_message(message) :
             print(reaction)
             print(user)
 
-          reaction, user = await client.wait_for("reaction_add", check=check)
+          await client.wait_for("reaction_add", check=check)
           #print("hello")
           #if res:
             #reaction, user = res
