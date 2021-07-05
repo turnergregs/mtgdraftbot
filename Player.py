@@ -7,6 +7,7 @@ class Player:
   def __init__(self, author):
     self.user = author
     self.name = str(author)
+    self.nickname = author.split("#")[0]
     self.pool = []
     self.pack = []
     self.packNum = 1
@@ -26,14 +27,21 @@ class Player:
   def addToPool(self, card):
     self.pool.append(card)
 
-  def viewPool(self) :
-    text = ""
-    for card in self.pool :
-      text += card.name+"\n"
-    return text
+  async def viewPool(self, callback) :
+    #text = ""
+    #for card in self.pool :
+      #text += card.name+"\n"
+    #return text
+    temp = Pack(self.pool)
+    await callback(self.user, temp.getPackFile(str(self.name)+"pool"), text)
+
+  def numPacks(self) :
+    pack = 1 if self.pack != [] else 0
+    return pack + len(self.nextPacks)
 
   def getQueue(self) :
-    return self.name+" has "+str(len(self.nextPacks))+" packs"
+    return self.numPacks
+    #return self.name+" has "+str(len(self.nextPacks))+" packs"
 
   async def endDraft(self) :
     filename = "draft"+self.name+".txt"

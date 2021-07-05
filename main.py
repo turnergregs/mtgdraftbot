@@ -9,6 +9,8 @@ load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 client = discord.Client()
 
+admin = "grenrut#9853"
+
 players = {}
 setup = False
 inProgress = False
@@ -138,6 +140,7 @@ async def on_message(message) :
 
   elif message.content.startswith('!leave') :
     username = str(message.author)
+    nickname = str(message.author).split("#")[0]
     if len(drafts) == 0 :
       await message.channel.send("no drafts to leave")
     elif len(command) > 1 :
@@ -147,14 +150,14 @@ async def on_message(message) :
         await message.channel.send("you aren't in the draft")
       else :
         drafts[command[1]].removePlayer(username)
-        await message.channel.send(username+" has left the draft")
+        await message.channel.send(nickname+" has left the draft")
     else :
       draft = getPlayerDraft(username)
       if id is None :
         await message.channel.send("you aren't in any drafts")
       else :
         draft.removePlayer(username)
-        await message.channel.send(username+" has left the draft")
+        await message.channel.send(nickname+" has left the draft")
 
   elif message.content.startswith('!start') :
     if len(drafts) == 0 :
@@ -173,7 +176,7 @@ async def on_message(message) :
       await message.channel.send("no drafts to end")
     else :
       draft = drafts[int(command[1])] if len(command) > 1 else drafts[0]
-      if draft.host != str(message.author) :
+      if draft.host != str(message.author) and str(message.author) != admin :
         await message.channel.send("only the host can end the draft")
       else :
         await message.channel.send("ended draft "+str(draft.id))
@@ -192,10 +195,24 @@ async def on_message(message) :
       if draft is None :
         await message.channel.send("you aren't in a draft")
       else :
-        text = draft.makePick(username, int(command[1]))
-        await message.channel.send(text)
+        #text = draft.makePick(username, int(command[1]))
+        #await message.channel.send(text)
+        text = draft.getPickName(username, int(command[1]))
         if text != "invalid pick" :
-          await draft.sendNextPack(username, sendFile)
+          msg = await message.channel.send(text)
+          up = discord.utils.get(bot.get_all_emojis(), name='+1')
+          down = discord.utils.get(bot.get_all_emojis(), name='-1')
+          await bot.add_reaction(msg, up)
+          await bot.add_reaction(msg, down)
+          res = await bot.wait_for_reaction(emoji=[up,down], message=msg, user=message.author)
+          if res:
+            reaction, user = res
+            if str(reaction.emoji) == ":+1:":
+              draft.makePick(username, int(command[1]))
+              await draft.sendNextPack(username, sendFile)
+            if str(reaction.emoji) == ":-1:":
+              await message.channel.send("please pick again")
+          
 
   elif message.content.startswith('!pool') :
     if len(drafts) == 0 :
@@ -206,24 +223,30 @@ async def on_message(message) :
       if draft is None :
         await message.channel.send("You aren't in a draft")
       else :
-        await message.channel.send(draft.viewPool(username))
+        await message.channel.send(draft.viewPool(username, sendFile))
 
   elif message.content.startswith('!players') :
     if len(drafts) == 0 :
       await message.channel.send("no current drafts")
     else :
       draft = drafts[int(command[1])] if len(command) > 1 else drafts[0]
-      await message.channel.send(str(draft.getPlayers())+" players have joined draft "+str(draft.id))
+      if draft is None :
+        await message.channel.send("draft doesn't exist")
+      #await message.channel.send(str(draft.getPlayers())+" players have joined draft "+str(draft.id))
+      await message.channel.send(draft.listPlayers())
 
   elif message.content.startswith('!queue') :
     if len(drafts) == 0 :
       await message.channel.send("no current drafts")
-    username = command[1]
-    draft = getPlayerDraft(username)
-    if draft is None :
-      await message.channel.send("That player isn't in a draft")
+    #username = command[1]
+    #draft = getPlayerDraft(username)
+    #if draft is None :
+      #await message.channel.send("That player isn't in a draft")
     else :
-      await message.channel.send(draft.getQueue(username))
+      draft = drafts[int(command[1])] if len(command) > 1 else drafts[0]
+      if draft is None :
+        await message.channel.send("draft doesn't exist")
+      await message.channel.send(draft.getQueue())
     
   elif message.content.startswith('!card') :
     text = ""

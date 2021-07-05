@@ -38,6 +38,12 @@ class Draft :
   def maxPlayers(self) :
     return int(len(self.cards)/45)
 
+  def listPlayers(self) :
+    text = str(self.getPlayers())+" players have joined draft "+str(self.id)+"\n"
+    for i in self.getPlayers() :
+      text += self.players[i].nickname+"\n"
+    return text
+
   def getPlayers(self) :
     return len(self.players)
 
@@ -51,7 +57,7 @@ class Draft :
       return "draft has already started"
     p = Player(username)
     self.players[str(username)] = p
-    return str(username)+" joins draft "+str(self.id)+", "+str(len(self.players))+"/"+str(self.maxPlayers())+" players have joined"
+    return str(p.nickname)+" joins draft "+str(self.id)+", "+str(len(self.players))+"/"+str(self.maxPlayers())+" players have joined"
 
   def removePlayer(self, username) :
     del self.players[username]
@@ -83,10 +89,20 @@ class Draft :
     for name in self.players :
       await self.players[name].sendPack(callback)
 
-  def makePick(self, username, pick) :
+  def getPickName(self, username, pick) :
     player = self.players[username]
     if pick-1 >= player.pack.length() or pick < 1:
       return "invalid pick"
+    #card = player.pack.pickCard(pick-1)
+    card = player.pack.cards[pick-1]
+    #print(player.name+" picks "+card.name)
+    #player.addToPool(card)
+    return "pick "+card.name+"?"
+
+  def makePick(self, username, pick) :
+    player = self.players[username]
+    #if pick-1 >= player.pack.length() or pick < 1:
+      #return "invalid pick"
     card = player.pack.pickCard(pick-1)
     #print(player.name+" picks "+card.name)
     player.addToPool(card)
@@ -99,12 +115,27 @@ class Draft :
         await self.endDraft(player)
         pass
       else :
-        player.packNum += 1
-        player.pack.pick = 1
-        self.getNewPack(player)
-        await player.sendPack(callback)
+        if self.checkReady() :
+          await self.sendNewPacks(callback)
+        #player.packNum += 1
+        #player.pack.pick = 1
+        #self.getNewPack(player)
+        #await player.sendPack(callback)
     else :
       await self.rotatePacks(player, callback)
+
+  def checkReady(self) :
+    for p in self.players :
+      if p.numPacks() > 0 :
+        return false
+    return true
+
+  async def sendNewPack(self, callback) :
+    for p in self.players :
+      p.packNum += 1
+      p.pack.pick = 1
+      self.getNewPack(p)
+      await p.sendPack(callback)
 
   def getNextPlayer(self, player, increment) :
     if player.name in self.players :
@@ -153,10 +184,14 @@ class Draft :
     await self.channel.send("Draft "+str(self.id)+" ended")
     self.id = -1
 
-  def viewPool(self, username) :
+  async def viewPool(self, username, callback) :
     player = self.players[username]
-    return player.viewPool()
+    await player.viewPool(callback)
 
-  def getQueue(self, username) :
-    player = self.players[username]
-    return player.getQueue()
+  def getQueue(self) :
+    text = ""
+    for p in self.players :
+      text += self.players[p].nickname+" has "+str(self.players[p].getQueue())+" packs\n"
+    return text
+    #player = self.players[username]
+    #eturn player.getQueue()
