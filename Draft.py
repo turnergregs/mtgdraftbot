@@ -40,7 +40,7 @@ class Draft :
 
   def listPlayers(self) :
     text = str(self.getPlayers())+" players have joined draft "+str(self.id)+"\n"
-    for i in self.getPlayers() :
+    for i in self.players :
       text += self.players[i].nickname+"\n"
     return text
 
