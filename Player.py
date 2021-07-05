@@ -7,7 +7,7 @@ class Player:
   def __init__(self, author):
     self.user = author
     self.name = str(author)
-    self.nickname = author.split("#")[0]
+    self.nickname = str(author).split("#")[0]
     self.pool = []
     self.pack = []
     self.packNum = 1
