@@ -127,8 +127,8 @@ class Draft :
   def checkReady(self) :
     for p in self.players :
       if self.players[p].numPacks() > 0 :
-        return false
-    return true
+        return False
+    return True
 
   async def sendNewPack(self, callback) :
     for p in self.players :
