@@ -212,11 +212,11 @@ async def on_message(message) :
         text = draft.getPickName(username, int(command[1]))
         if text != "invalid pick" :
           msg = await message.channel.send(text)
-          up = discord.utils.get(bot.get_all_emojis(), name='+1')
-          down = discord.utils.get(bot.get_all_emojis(), name='-1')
-          await bot.add_reaction(msg, up)
-          await bot.add_reaction(msg, down)
-          res = await bot.wait_for_reaction(emoji=[up,down], message=msg, user=message.author)
+          up = discord.utils.get(client.get_all_emojis(), name='+1')
+          down = discord.utils.get(client.get_all_emojis(), name='-1')
+          await client.add_reaction(msg, up)
+          await client.add_reaction(msg, down)
+          res = await client.wait_for_reaction(emoji=[up,down], message=msg, user=message.author)
           if res:
             reaction, user = res
             if str(reaction.emoji) == ":+1:":
