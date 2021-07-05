@@ -223,7 +223,12 @@ async def on_message(message) :
             return True
 
           reaction, user = await client.wait_for("reaction_add", check=check)
-          print("what up gurl")
+          if reaction.emoji == "👍" :
+            print("nice")
+          elif reaction.emoji == "👎" :
+            print("nope")
+          else :
+            print("uh oh")
           #print("hello")
           #if res:
             #reaction, user = res
