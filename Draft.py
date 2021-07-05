@@ -126,7 +126,7 @@ class Draft :
 
   def checkReady(self) :
     for p in self.players :
-      if p.numPacks() > 0 :
+      if self.players[p].numPacks() > 0 :
         return false
     return true
 
