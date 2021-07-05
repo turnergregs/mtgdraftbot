@@ -221,6 +221,8 @@ async def on_message(message) :
 
           notReacted = True
           def check(reaction, user) :
+            print(user)
+            print(username)
             return user == username
           
           while notReacted :
