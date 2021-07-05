@@ -207,31 +207,22 @@ async def on_message(message) :
       if draft is None :
         await message.channel.send("you aren't in a draft")
       else :
-        #text = draft.makePick(username, int(command[1]))
-        #await message.channel.send(text)
-        text = draft.getPickName(username, int(command[1]))
+        text = draft.makePick(username, int(command[1]))
+        await message.channel.send(text)
         if text != "invalid pick" :
-          msg = await message.channel.send(text+" (react with 👍 or 👎")
+          await draft.sendNextPack(username, sendFile)
+
+
+        #text = draft.getPickName(username, int(command[1]))
+        #if text != "invalid pick" :
+          #msg = await message.channel.send(text)
           #await msg.add_reaction("👍")
           #await msg.add_reaction("👎")
-          #up = discord.utils.get(client.get_all_emojis(), name='+1')
-          #down = discord.utils.get(client.get_all_emojis(), name='-1')
-          #await client.add_reaction(msg, up)
-          #await client.add_reaction(msg, down)
 
-          def check(reaction, user) :
-            return user == username
+          #def check(reaction, user) :
+            #return user == username
           
-          res = await client.wait_for("reaction_add", check=check)
-          if res :
-            print("yay you reacted!")
-          #if reaction.emoji == "👍" :
-            #print("nice")
-          #elif reaction.emoji == "👎" :
-            #print("nope")
-          #else :
-            #print("uh oh")
-          #print("hello")
+          #res = await client.wait_for("reaction_add", check=check)
           #if res:
             #reaction, user = res
             #if str(reaction.emoji) == ":+1:":
