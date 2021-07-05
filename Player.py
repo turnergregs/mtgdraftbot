@@ -33,6 +33,7 @@ class Player:
       #text += card.name+"\n"
     #return text
     temp = Pack(self.pool)
+    print("did we get here?")
     await callback(self.user, temp.getPackFile(str(self.name)+"pool"), text)
 
   def numPacks(self) :
@@ -40,7 +41,7 @@ class Player:
     return pack + len(self.nextPacks)
 
   def getQueue(self) :
-    return self.numPacks
+    return self.numPacks()
     #return self.name+" has "+str(len(self.nextPacks))+" packs"
 
   async def endDraft(self) :
