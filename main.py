@@ -220,7 +220,8 @@ async def on_message(message) :
           #await client.add_reaction(msg, down)
 
           def check(message, content) :
-            print("nice")
+            print(message)
+            print(content)
 
           res = await client.wait_for("reaction_add", check=check)
           if res:
