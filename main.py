@@ -219,7 +219,7 @@ async def on_message(message) :
           #await client.add_reaction(msg, up)
           #await client.add_reaction(msg, down)
 
-          def check(res) :
+          def check(message, content) :
             print("nice")
 
           res = await client.wait_for("reaction_add", check=check)
