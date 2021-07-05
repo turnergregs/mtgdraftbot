@@ -219,11 +219,14 @@ async def on_message(message) :
           #await client.add_reaction(msg, up)
           #await client.add_reaction(msg, down)
 
-          def check(response, author) :
-            print(response)
-            print(author)
+          def check(reaction, user) :
+            print(reaction)
+            print(user)
 
-          res = await client.wait_for("reaction_add", check=check)
+          reaction, user = await client.wait_for("reaction_add", check=check)
+          print("hello")
+          if reaction.emoji == "👍":
+            print("nice")
           #if res:
             #reaction, user = res
             #if str(reaction.emoji) == ":+1:":
