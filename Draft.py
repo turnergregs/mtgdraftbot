@@ -194,5 +194,3 @@ class Draft :
     for p in self.players :
       text += self.players[p].nickname+" has "+str(self.players[p].getQueue())+" packs\n"
     return text
-    #player = self.players[username]
-    #eturn player.getQueue()

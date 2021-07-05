@@ -256,10 +256,6 @@ async def on_message(message) :
   elif message.content.startswith('!queue') :
     if len(drafts) == 0 :
       await message.channel.send("no current drafts")
-    #username = command[1]
-    #draft = getPlayerDraft(username)
-    #if draft is None :
-      #await message.channel.send("That player isn't in a draft")
     else :
       draft = getDraft(command)
       if draft is None :

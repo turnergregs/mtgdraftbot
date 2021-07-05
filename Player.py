@@ -39,7 +39,6 @@ class Player:
 
   def getQueue(self) :
     return self.numPacks()
-    #return self.name+" has "+str(len(self.nextPacks))+" packs"
 
   async def endDraft(self) :
     filename = "draft"+self.name+".txt"
