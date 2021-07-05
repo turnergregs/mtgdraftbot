@@ -30,6 +30,16 @@ def getPlayerDraft(username) :
       return draft
   return None
 
+def getDraft(command) :
+  if len(command) > 1 :
+    num = int(command[1])
+    for draft in drafts :
+      if draft.id == num :
+        return drafts[num]
+    return None
+  else :
+    return getFirstOpenDraftId()
+
 def getCardByName(name) :
   return getCard("https://api.scryfall.com/cards/named?fuzzy="+name)
 
@@ -63,16 +73,6 @@ def getCube(id) :
 
 def getSamplePack(id) :
   return "http://cubecobra.com/cube/samplepack/"+id
-
-def getDraft(command) :
-  if len(command) > 1 :
-    num = int(command[1])
-    if num not in drafts.keys() :
-      return None
-    else :
-      return drafts[num]
-  else :
-    return getFirstOpenDraftId()
 
 async def startDraft(message, draft) :
   draft.loadPacks()
