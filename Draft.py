@@ -132,10 +132,11 @@ class Draft :
 
   async def sendNewPacks(self, callback) :
     for p in self.players :
-      p.packNum += 1
-      p.pack.pick = 1
-      self.getNewPack(p)
-      await p.sendPack(callback)
+      player = self.playesr[p]
+      player.packNum += 1
+      player.pack.pick = 1
+      self.getNewPack(player)
+      await player.sendPack(callback)
 
   def getNextPlayer(self, player, increment) :
     if player.name in self.players :
