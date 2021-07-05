@@ -30,7 +30,8 @@ class Player:
 
   async def viewPool(self, callback) :
     temp = Pack(self.pool)
-    await callback(self.user, temp.getPackFile(str(self.name)+"pool", 7), "Here are the cards you've picked so far")
+    poolSize = 7
+    await callback(self.user, temp.getPackFile(str(self.name)+"pool", poolSize), "Here are the cards you've picked so far")
 
   def numPacks(self) :
     pack = 1 if self.pack != [] else 0
