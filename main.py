@@ -241,7 +241,7 @@ async def on_message(message) :
       if draft is None :
         await message.channel.send("You aren't in a draft")
       else :
-        await message.channel.send(draft.viewPool(username, sendFile))
+        await draft.viewPool(username, sendFile)
 
   elif message.content.startswith('!players') :
     if len(drafts) == 0 :
