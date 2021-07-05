@@ -221,13 +221,13 @@ async def on_message(message) :
 
           notReacted = True
           def check(reaction, user) :
-            if user == username :
-              notReacted = False
-              return True
+            return user == username
           
           while notReacted :
-            reaction, user = await client.wait_for("reaction_add", check=check)
-          print("hello")
+            res = await client.wait_for("reaction_add", check=check)
+            if res :
+              notReacted = False
+              print("yay you reacted!")
           #if reaction.emoji == "👍" :
             #print("nice")
           #elif reaction.emoji == "👎" :
