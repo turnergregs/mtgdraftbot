@@ -1,5 +1,6 @@
 import discord
 import os
+from Pack import Pack
 
 class Player:
   pick = 1
