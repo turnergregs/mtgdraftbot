@@ -219,9 +219,11 @@ async def on_message(message) :
           #await client.add_reaction(msg, up)
           #await client.add_reaction(msg, down)
 
-          def check(message, content) :
-            print(message)
-            print(content)
+          def check(response, author) :
+            if response == "👍" :
+              print("yes")
+            elif response == "👎" :
+              print("no")
 
           res = await client.wait_for("reaction_add", check=check)
           if res:
