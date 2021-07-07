@@ -20,7 +20,7 @@ drafts = []
 
 def getFirstOpenDraftId() :
   for draft in drafts :
-    if not draft.isFull() :
+    if not draft.isFull() and draft.id >= 0:
       return draft
   return None
 
@@ -39,6 +39,12 @@ def getDraft(command) :
     return None
   else :
     return getFirstOpenDraftId()
+
+def noActiveDrafts() :
+  for draft in drafts :
+    if draft.id >= 0 :
+      return False
+  return True
 
 def getCardByName(name) :
   return getCard("https://api.scryfall.com/cards/named?fuzzy="+name)
@@ -107,7 +113,7 @@ async def on_message(message) :
     return
 
   elif message.content.startswith('!drafts') :
-    if len(drafts) == 0 :
+    if len(drafts) == 0 or noActiveDrafts():
       await message.channel.send("no current drafts")
     else :
       text = ""
