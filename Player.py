@@ -34,7 +34,7 @@ class Player:
     await callback(self.user, temp.getPackFile(str(self.name)+"pool", poolSize), "Here are the cards you've picked so far")
 
   def numPacks(self) :
-    pack = 1 if self.pack != [] else 0
+    pack = 1 if self.pack != [] and self.pack is not None else 0
     return pack + len(self.nextPacks)
 
   def getQueue(self) :
