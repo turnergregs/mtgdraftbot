@@ -20,7 +20,7 @@ drafts = []
 
 def getFirstOpenDraftId() :
   for draft in drafts :
-    if not draft.isFull() and draft.id >= 0:
+    if not draft.isFull() and draft.id >= 0 :
       return draft
   return None
 
