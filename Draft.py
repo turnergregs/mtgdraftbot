@@ -101,10 +101,10 @@ class Draft :
 
   def makePick(self, username, pick) :
     player = self.players[username]
-    #if pick-1 >= player.pack.length() or pick < 1:
-      #return "invalid pick"
+    if pick-1 >= player.pack.length() or pick < 1:
+      return "invalid pick"
     card = player.pack.pickCard(pick-1)
-    #print(player.name+" picks "+card.name)
+    print(player.name+" picks "+card.name)
     player.addToPool(card)
     return "picked "+card.name
 
@@ -158,7 +158,7 @@ class Draft :
     text = ""
     index = 1
     for c in player.pack.cards :
-      text += " "+str(index)+" "+c.name+"\n"
+      text += c.name+", "
       index += 1
     print(text)
     if len(player.nextPacks) > 0 :

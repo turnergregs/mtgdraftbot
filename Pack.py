@@ -25,9 +25,11 @@ class Pack :
   def getPackFile(self, name, width=5) :
     height = math.ceil(len(self.cards)/width)
     imgs = []
+    text = ""
     for card in self.cards :
-      print(card.name)
+      text += str(card.name)+', '
       imgs.append(requests.get(card.png, stream=True).raw)
+    print(text)
     images = [Image.open(x) for x in imgs]
     widths, heights = zip(*(i.size for i in images))
     #total_width = sum(widths)
