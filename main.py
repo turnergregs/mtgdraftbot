@@ -9,7 +9,7 @@ load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 client = discord.Client()
 
-admin = "grenrut#9853"
+admin = "" #put your discord tag here (name#1234)
 
 players = {}
 setup = False
@@ -219,6 +219,7 @@ async def on_message(message) :
           await draft.sendNextPack(username, sendFile)
 
 
+        # Below code is for using reactions rather than !pick command, doesn't currently work
         #text = draft.getPickName(username, int(command[1]))
         #if text != "invalid pick" :
           #msg = await message.channel.send(text)
